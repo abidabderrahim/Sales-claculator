@@ -1,76 +1,76 @@
-const productForm = document.getElementById("productForm");
-const productList = document.getElementById("productList");
-const totalSalesEl = document.getElementById("totalSales");
-const totalShareEl = document.getElementById("totalShare");
+let products = JSON.parse(localStorage.getItem('products')) || [];
 
-let products = JSON.parse(localStorage.getItem("products")) || [];
-
-function updateTotals() {
+function renderProducts() {
+  const table = document.getElementById("productTable");
+  table.innerHTML = '';
   let totalSales = 0;
   let totalShare = 0;
 
   products.forEach(p => {
-    totalSales += p.sales;
-    totalShare += p.sales * 0.03 * p.price;
-  });
+    const productTotal = p.price * p.count;
+    const myShare = productTotal * 0.03;
+    totalSales += productTotal;
+    totalShare += myShare;
 
-  totalSalesEl.textContent = totalSales;
-  totalShareEl.textContent = totalShare.toFixed(2);
-}
-
-function renderProducts() {
-  productList.innerHTML = "";
-  products.forEach((p, index) => {
-    const card = document.createElement("div");
-    card.className = "product-card";
-
-    card.innerHTML = `
-      <img src="${p.image}" alt="${p.name}">
-      <div class="product-info">
-        <p><strong>${p.name}</strong></p>
-        <p>Sales: ${p.sales}</p>
-        <p>3%: ${(p.sales * 0.03 * p.price).toFixed(2)} MAD</p>
-      </div>
-      <button class="delete-btn" onclick="deleteProduct(${index})">Delete</button>
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${p.image ? `<img src="${p.image}" />` : ''}</td>
+      <td>${p.name}</td>
+      <td>${p.price.toFixed(2)}</td>
+      <td>${p.count}</td>
+      <td>${productTotal.toFixed(2)}</td>
+      <td>${myShare.toFixed(2)}</td>
     `;
-
-    productList.appendChild(card);
+    table.appendChild(row);
   });
 
-  updateTotals();
+  document.getElementById("totalSales").textContent = totalSales.toFixed(2);
+  document.getElementById("totalShare").textContent = totalShare.toFixed(2);
+  localStorage.setItem('products', JSON.stringify(products));
 }
 
-productForm.addEventListener("submit", (e) => {
-  e.preventDefault();
+function addProduct() {
+  const name = document.getElementById("productName").value;
+  const price = parseFloat(document.getElementById("productPrice").value);
+  const count = parseInt(document.getElementById("productCount").value);
+  const imageFile = document.getElementById("productImage").files[0];
 
-  const name = document.getElementById("name").value;
-  const sales = parseInt(document.getElementById("sales").value);
-  const imageFile = document.getElementById("image").files[0];
+  if (!name || isNaN(price) || isNaN(count)) {
+    alert("المرجو إدخال جميع القيم بشكل صحيح");
+    return;
+  }
 
-  if (!imageFile) return;
-
-  const reader = new FileReader();
-  reader.onload = function (event) {
-    const newProduct = {
-      name,
-      sales,
-      price: 100, // يمكنك تغيير السعر أو إضافته كـ input
-      image: event.target.result,
-    };
-
+  if (imageFile) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const newProduct = { name, price, count, image: e.target.result };
+      products.push(newProduct);
+      renderProducts();
+    }
+    reader.readAsDataURL(imageFile);
+  } else {
+    const newProduct = { name, price, count, image: null };
     products.push(newProduct);
-    localStorage.setItem("products", JSON.stringify(products));
     renderProducts();
-    productForm.reset();
-  };
+  }
 
-  reader.readAsDataURL(imageFile);
-});
-
-function deleteProduct(index) {
-  products.splice(index, 1);
-  localStorage.setItem("products", JSON.stringify(products));
-  renderProducts();
+  document.getElementById("productName").value = '';
+  document.getElementById("productPrice").value = '';
+  document.getElementById("productCount").value = '';
+  document.getElementById("productImage").value = '';
 }
 
+function downloadJSON() {
+  const dataStr = JSON.stringify(products, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'TheePercentProducts.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  alert("تم تنزيل ملف JSON يحتوي على جميع المنتجات والصور");
+}
+
+// Load products from localStorage on start
 renderProducts();
