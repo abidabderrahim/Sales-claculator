@@ -1,0 +1,10 @@
+body { font-family: Arial, sans-serif; direction: rtl; padding: 20px; background: #f0f4f8; }
+h1 { text-align: center; color: #333; }
+input, button { padding: 8px; margin: 5px; border-radius: 5px; border: 1px solid #ccc; }
+button { background: #007bff; color: white; border: none; cursor: pointer; }
+button:hover { background: #0056b3; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+th { background: #eee; }
+img { max-width: 50px; max-height: 50px; border-radius: 5px; }
+.container { max-width: 600px; margin: auto; }
