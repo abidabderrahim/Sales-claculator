@@ -16,7 +16,7 @@ if (localStorage.getItem("products")) {
   renderSummary();
 }
 
-// Show image preview
+// Show live image preview
 imageInput.addEventListener("change", () => {
   const file = imageInput.files[0];
   if (!file) {
@@ -56,14 +56,12 @@ productForm.addEventListener("submit", (e) => {
   reader.readAsDataURL(imageFile);
 });
 
-// Reset and download JSON with day_month_year
+// Reset and download JSON with date
 resetBtn.addEventListener("click", () => {
   if (products.length === 0) return alert("No products to reset!");
-
   const date = new Date();
   const dateStr = `${date.getDate()}_${date.getMonth()+1}_${date.getFullYear()}`;
   downloadJSON(`products_${dateStr}.json`);
-
   products = [];
   saveAndRender();
 });
@@ -76,7 +74,6 @@ uploadInput.addEventListener("change", (e) => {
   reader.onload = (event) => {
     try {
       const uploadedProducts = JSON.parse(event.target.result);
-      // Validate uploaded data
       const validProducts = uploadedProducts.filter(p => p.image && p.name && p.price && p.quantity);
       if (validProducts.length === 0) {
         alert("Invalid JSON. Please use JSON exported from this app.");
@@ -98,7 +95,7 @@ function saveAndRender() {
   renderSummary();
 }
 
-// Render products
+// Render products table
 function renderProducts() {
   productsDiv.innerHTML = "";
   products.forEach((p, index) => {
@@ -124,25 +121,30 @@ function deleteProduct(index) {
   saveAndRender();
 }
 
-// Render summary
+// Render summary (Total Sold after 3% per product, Total Profit)
 function renderSummary() {
   if (products.length === 0) {
     summaryDiv.innerHTML = "";
     return;
   }
 
-  const totalSold = products.reduce((sum,p) => sum + p.price*p.quantity, 0);
-  const total3Percent = products.reduce((sum,p) => sum + p.price*p.quantity*0.03,0);
-  const totalProfit = products.reduce((sum,p) => sum + p.profit,0);
+  let totalSoldAfter3 = 0; // total received after 3% per product
+  let totalProfit = 0;     // sum of 3% for each product
+
+  products.forEach(p => {
+    const productTotal = p.price * p.quantity;
+    const productProfit = productTotal * 0.03;
+    totalProfit += productProfit;
+    totalSoldAfter3 += productTotal - productProfit;
+  });
 
   summaryDiv.innerHTML = `
-    Total Sold Amount: ${totalSold.toFixed(2)} DH<br>
-    Total 3% Deduction: ${total3Percent.toFixed(2)} DH<br>
-    Total Profit: ${totalProfit.toFixed(2)} DH
+    Total Sold Amount (after 3% per product): ${totalSoldAfter3.toFixed(2)} DH<br>
+    Total Profit from 3%: ${totalProfit.toFixed(2)} DH
   `;
 }
 
-// Download JSON
+// Download JSON helper
 function downloadJSON(filename) {
   const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(products, null, 2));
   const dlAnchor = document.createElement("a");
