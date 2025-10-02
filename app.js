@@ -105,17 +105,31 @@ function renderProducts() {
     div.className = "product";
     div.innerHTML = `
       <img src="${p.image}" alt="${p.name}">
-      <div>
-        <strong>${p.name}</strong><br>
-        Price: ${p.price.toFixed(2)} DH<br>
-        Quantity: ${p.quantity}<br>
-        Profit: ${p.profit.toFixed(2)} DH
+      <div class="productInfo">
+        <strong>${p.name}</strong>
+        <strong>Price: ${p.price.toFixed(2)} DH</strong>
+        <strong>Quantity: ${p.quantity}</strong>
+        <strong>Profit: ${p.profit.toFixed(2)} DH</strong>
       </div>
-      <button onclick="deleteProduct(${index})">Delete</button>
+      <button onclick="deleteProduct(${index})" class="deleteProduct">Delete</button>
     `;
     productsDiv.appendChild(div);
   });
 }
+
+
+// Trigger image input
+const uploadImageBtn = document.getElementById("uploadImageBtn");
+uploadImageBtn.addEventListener("click", () => {
+  document.getElementById("image").click();
+});
+
+// Trigger JSON upload input
+const uploadJSONBtn = document.getElementById("uploadJSONBtn");
+uploadJSONBtn.addEventListener("click", () => {
+  document.getElementById("uploadInput").click();
+});
+
 
 // Delete product
 function deleteProduct(index) {
