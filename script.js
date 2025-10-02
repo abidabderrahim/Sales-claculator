@@ -1,63 +1,76 @@
+const productForm = document.getElementById("productForm");
+const productList = document.getElementById("productList");
+const totalSalesEl = document.getElementById("totalSales");
+const totalShareEl = document.getElementById("totalShare");
+
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
-function displayProducts() {
-  const container = document.getElementById("products");
-  container.innerHTML = "";
-  products.forEach((product, index) => {
-    container.innerHTML += `
-      <div class="product">
-        <img src="${product.image}" alt="Product Image" />
-        <h3>${product.name}</h3>
-        <p><strong>Price:</strong> $${product.price}</p>
-        <p>${product.description}</p>
-        <button class="delete-btn" onclick="deleteProduct(${index})">Delete</button>
-      </div>
-    `;
+function updateTotals() {
+  let totalSales = 0;
+  let totalShare = 0;
+
+  products.forEach(p => {
+    totalSales += p.sales;
+    totalShare += p.sales * 0.03 * p.price;
   });
+
+  totalSalesEl.textContent = totalSales;
+  totalShareEl.textContent = totalShare.toFixed(2);
 }
 
-function addProduct() {
-  const name = document.getElementById("name").value;
-  const price = document.getElementById("price").value;
-  const description = document.getElementById("description").value;
-  const imageInput = document.getElementById("image");
+function renderProducts() {
+  productList.innerHTML = "";
+  products.forEach((p, index) => {
+    const card = document.createElement("div");
+    card.className = "product-card";
 
-  if (!name || !price || !imageInput.files[0]) {
-    alert("Please fill all fields and add an image!");
-    return;
-  }
+    card.innerHTML = `
+      <img src="${p.image}" alt="${p.name}">
+      <div class="product-info">
+        <p><strong>${p.name}</strong></p>
+        <p>Sales: ${p.sales}</p>
+        <p>3%: ${(p.sales * 0.03 * p.price).toFixed(2)} MAD</p>
+      </div>
+      <button class="delete-btn" onclick="deleteProduct(${index})">Delete</button>
+    `;
+
+    productList.appendChild(card);
+  });
+
+  updateTotals();
+}
+
+productForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const sales = parseInt(document.getElementById("sales").value);
+  const imageFile = document.getElementById("image").files[0];
+
+  if (!imageFile) return;
 
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = function (event) {
     const newProduct = {
       name,
-      price,
-      description,
-      image: e.target.result
+      sales,
+      price: 100, // يمكنك تغيير السعر أو إضافته كـ input
+      image: event.target.result,
     };
+
     products.push(newProduct);
     localStorage.setItem("products", JSON.stringify(products));
-    displayProducts();
+    renderProducts();
+    productForm.reset();
   };
-  reader.readAsDataURL(imageInput.files[0]);
 
-  document.getElementById("name").value = "";
-  document.getElementById("price").value = "";
-  document.getElementById("description").value = "";
-  imageInput.value = "";
-}
+  reader.readAsDataURL(imageFile);
+});
 
 function deleteProduct(index) {
-  if (confirm("Are you sure you want to delete this product?")) {
-    products.splice(index, 1);
-    localStorage.setItem("products", JSON.stringify(products));
-    displayProducts();
-  }
+  products.splice(index, 1);
+  localStorage.setItem("products", JSON.stringify(products));
+  renderProducts();
 }
 
-displayProducts();
-
-// Register Service Worker
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
-}
+renderProducts();
