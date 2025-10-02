@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sales Calculator - 3% DH</title>
   <link rel="stylesheet" href="style.css">
+  <!-- icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" integrity="sha512-XcIsjKMcuVe0Ucj/xgIXQnytNwBttJbNjltBV18IOnru2lDPe9KRRyvCXw6Y5H415vbBLRm8+q6fmLUU7DfO6Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- icons -->
 </head>
 <body>
   <div class="container">
@@ -14,16 +17,30 @@
       <input type="text" id="name" placeholder="Product Name" required>
       <input type="number" id="price" placeholder="Product Price (DH)" required>
       <input type="number" id="quantity" placeholder="Quantity Sold" required>
-      <input type="file" id="image" accept="image/*" required>
+
+      <!-- Hidden file input -->
+      <input type="file" id="image" accept="image/*" required style="display:none;">
+
+      <!-- Custom button -->
+      <button type="button" id="uploadImageBtn">
+        <i class="ri-upload-2-fill"></i> Upload Image
+      </button>
+
       <div id="previewContainer">
         <img id="previewImage" src="" alt="" style="display:none; width:80px; height:80px; object-fit:cover; margin-top:10px;">
       </div>
+
       <button type="submit">Add Product</button>
     </form>
 
     <div class="buttons">
       <button id="resetBtn">Reset & Download JSON</button>
-      <input type="file" id="uploadInput" accept=".json">
+
+      <!-- Hidden JSON file input -->
+      <input type="file" id="uploadInput" accept=".json" style="display:none;">
+      <button type="button" id="uploadJSONBtn">
+        <i class="ri-upload-2-fill"></i> Upload JSON
+      </button>
     </div>
 
     <div id="products"></div>
