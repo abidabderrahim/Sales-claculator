@@ -9,14 +9,14 @@ const summaryDiv = document.getElementById("summary");
 const previewImage = document.getElementById("previewImage");
 const imageInput = document.getElementById("image");
 
-// Load from localStorage
+// Load products from localStorage
 if (localStorage.getItem("products")) {
   products = JSON.parse(localStorage.getItem("products"));
   renderProducts();
   renderSummary();
 }
 
-// Show live image preview
+// Live image preview
 imageInput.addEventListener("change", () => {
   const file = imageInput.files[0];
   if (!file) {
@@ -24,7 +24,7 @@ imageInput.addEventListener("change", () => {
     return;
   }
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = (e) => {
     previewImage.src = e.target.result;
     previewImage.style.display = "block";
   };
@@ -43,9 +43,9 @@ productForm.addEventListener("submit", (e) => {
   if (!imageFile) return alert("Please select an image");
 
   const reader = new FileReader();
-  reader.onload = function(event) {
+  reader.onload = (event) => {
     const imageData = event.target.result;
-    const profit = price * quantity * 0.03;
+    const profit = price * quantity * 0.03; // 3% profit
 
     const product = { name, price, quantity, profit, image: imageData };
     products.push(product);
@@ -60,7 +60,7 @@ productForm.addEventListener("submit", (e) => {
 resetBtn.addEventListener("click", () => {
   if (products.length === 0) return alert("No products to reset!");
   const date = new Date();
-  const dateStr = `${date.getDate()}_${date.getMonth()+1}_${date.getFullYear()}`;
+  const dateStr = `${date.getDate()}_${date.getMonth() + 1}_${date.getFullYear()}`;
   downloadJSON(`products_${dateStr}.json`);
   products = [];
   saveAndRender();
@@ -74,7 +74,9 @@ uploadInput.addEventListener("change", (e) => {
   reader.onload = (event) => {
     try {
       const uploadedProducts = JSON.parse(event.target.result);
-      const validProducts = uploadedProducts.filter(p => p.image && p.name && p.price && p.quantity);
+      const validProducts = uploadedProducts.filter(
+        (p) => p.image && p.name && p.price && p.quantity
+      );
       if (validProducts.length === 0) {
         alert("Invalid JSON. Please use JSON exported from this app.");
         return;
@@ -128,10 +130,10 @@ function renderSummary() {
     return;
   }
 
-  let totalSoldAfter3 = 0; // total received after 3% per product
-  let totalProfit = 0;     // sum of 3% for each product
+  let totalSoldAfter3 = 0; // Total after deducting 3% per product
+  let totalProfit = 0; // Sum of 3% per product
 
-  products.forEach(p => {
+  products.forEach((p) => {
     const productTotal = p.price * p.quantity;
     const productProfit = productTotal * 0.03;
     totalProfit += productProfit;
@@ -144,9 +146,10 @@ function renderSummary() {
   `;
 }
 
-// Download JSON helper
+// Download JSON
 function downloadJSON(filename) {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(products, null, 2));
+  const dataStr =
+    "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(products, null, 2));
   const dlAnchor = document.createElement("a");
   dlAnchor.setAttribute("href", dataStr);
   dlAnchor.setAttribute("download", filename);
