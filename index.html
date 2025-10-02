@@ -1,49 +1,25 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>حاسبة نسبة المبيعات</title>
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css">
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(() => console.log('Service Worker registered'));
-  });
-}
-</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sales Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-<div class="container">
-<h1>حاسبة نسبة المبيعات - 3%</h1>
+  <h1>Sales Calculator</h1>
 
-<label>إسم المنتج: <input type="text" id="productName"></label><br>
-<label>سعر المنتج: <input type="number" id="productPrice"></label><br>
-<label>عدد مرات البيع: <input type="number" id="productCount"></label><br>
-<label>صورة المنتج: <input type="file" id="productImage" accept="image/*"></label><br>
+  <div class="form">
+    <input type="text" id="name" placeholder="Product Name" required />
+    <input type="number" id="price" placeholder="Price" required />
+    <textarea id="description" placeholder="Description"></textarea>
+    <input type="file" id="image" accept="image/*" />
+    <button onclick="addProduct()">Add Product</button>
+  </div>
 
-<button onclick="addProduct()">إضافة المنتج</button>
-<button onclick="downloadJSON()">حفظ البيانات كملف JSON</button>
+  <div class="products" id="products"></div>
 
-<table>
-<thead>
-<tr>
-<th>الصورة</th>
-<th>المنتج</th>
-<th>السعر</th>
-<th>عدد المبيعات</th>
-<th>المجموع</th>
-<th>نسبتك 3%</th>
-</tr>
-</thead>
-<tbody id="productTable"></tbody>
-</table>
-
-<h3>القيمة الكلية لكل المبيعات: <span id="totalSales">0</span></h3>
-<h3>القيمة الكلية لنسبتك: <span id="totalShare">0</span></h3>
-</div>
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
