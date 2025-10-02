@@ -28,6 +28,10 @@ form button {
   width: 100%;
 }
 
+#previewContainer {
+  margin-bottom: 10px;
+}
+
 .buttons {
   margin: 20px 0;
   display: flex;

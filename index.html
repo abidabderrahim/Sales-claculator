@@ -3,18 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sales Calculator - 3%</title>
+  <title>Sales Calculator - 3% DH</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Sales Calculator (3% Profit)</h1>
+    <h1>Sales Calculator (3% Profit in DH)</h1>
 
     <form id="productForm">
       <input type="text" id="name" placeholder="Product Name" required>
-      <input type="number" id="price" placeholder="Product Price" required>
+      <input type="number" id="price" placeholder="Product Price (DH)" required>
       <input type="number" id="quantity" placeholder="Quantity Sold" required>
       <input type="file" id="image" accept="image/*" required>
+      <div id="previewContainer">
+        <img id="previewImage" src="" alt="" style="display:none; width:80px; height:80px; object-fit:cover; margin-top:10px;">
+      </div>
       <button type="submit">Add Product</button>
     </form>
 
