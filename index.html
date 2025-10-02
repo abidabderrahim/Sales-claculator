@@ -1,32 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sales Calculator</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حاسبة نسبة المبيعات</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('Service Worker registered'));
+  });
+}
+</script>
 </head>
 <body>
-  <div class="app-container">
-    <h1>💄 Sales Calculator</h1>
+<div class="container">
+<h1>حاسبة نسبة المبيعات - 3%</h1>
 
-    <form id="productForm">
-      <input type="text" id="name" placeholder="Product Name" required>
-      <input type="number" id="sales" placeholder="Sales Count" required>
-      <input type="file" id="image" accept="image/*" required>
-      <button type="submit">Add Product</button>
-    </form>
+<label>إسم المنتج: <input type="text" id="productName"></label><br>
+<label>سعر المنتج: <input type="number" id="productPrice"></label><br>
+<label>عدد مرات البيع: <input type="number" id="productCount"></label><br>
+<label>صورة المنتج: <input type="file" id="productImage" accept="image/*"></label><br>
 
-    <h2>Products</h2>
-    <div id="productList" class="product-list"></div>
+<button onclick="addProduct()">إضافة المنتج</button>
+<button onclick="downloadJSON()">حفظ البيانات كملف JSON</button>
 
-    <h2>Totals</h2>
-    <div class="totals">
-      <p><strong>Total Sales:</strong> <span id="totalSales">0</span></p>
-      <p><strong>Your 3% Share:</strong> <span id="totalShare">0</span> MAD</p>
-    </div>
-  </div>
+<table>
+<thead>
+<tr>
+<th>الصورة</th>
+<th>المنتج</th>
+<th>السعر</th>
+<th>عدد المبيعات</th>
+<th>المجموع</th>
+<th>نسبتك 3%</th>
+</tr>
+</thead>
+<tbody id="productTable"></tbody>
+</table>
 
-  <script src="script.js"></script>
+<h3>القيمة الكلية لكل المبيعات: <span id="totalSales">0</span></h3>
+<h3>القيمة الكلية لنسبتك: <span id="totalShare">0</span></h3>
+</div>
+<script src="script.js"></script>
 </body>
 </html>
