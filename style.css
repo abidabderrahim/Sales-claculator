@@ -1,62 +1,252 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
-  padding: 20px;
+/* root */
+
+@import url("https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
+
+:root {
+  --background-color: rgb(252, 252, 253);
+  --text-color-prim: rgb(45, 44, 44);
+  --text-color-sec: rgb(123, 123, 138);
+  --text-main: rgb(17, 140, 255);
+  --border-color: rgb(242, 242, 242);
+  --button-bg: rgb(43, 42, 42);
+  --button-text: rgb(251, 251, 254);
+  --button-bg-hover: rgb(17, 140, 255);
+  --button-text-hover: rgb(251, 251, 254);
+  --font-prim: "Inria Sans", sans-serif;
+  --font-sec: "Saira", sans-serif;
+}
+
+/* root */
+
+/* default values */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+input,
+button {
+  border: none;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+img {
+  height: auto;
 }
 
 .container {
-  max-width: 700px;
+  width: 100%;
+  max-width: 1450px;
   margin: 0 auto;
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 3rem;
+  box-sizing: border-box;
 }
 
+body {
+  background-color: var(--background-color);
+  user-select: none;
+}
+
+/* default values */
+
 h1 {
+  color: var(--text-color-prim);
   text-align: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+  font-family: var(--font-prim);
+}
+
+form {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 form input {
-  margin: 5px 0;
-  padding: 8px;
-  width: calc(100% - 20px);
+  width: 100%;
+  padding: 18px 20px;
+  font-size: 1rem;
+  outline: none;
+  font-family: var(--font-prim);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 20px;
+  text-transform: capitalize;
+  color: var(--text-color-prim);
+  background-color: var(--background-color);
+  border-radius: 2px;
+  border: 2px solid var(--border-color);
 }
 
 form button {
-  padding: 10px 15px;
-  margin-top: 10px;
   width: 100%;
+  font-family: var(--font-prim);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  text-transform: capitalize;
+  color: var(--button-text);
+  background-color: var(--button-bg);
+  padding: 12px 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
 }
 
-#previewContainer {
-  margin-bottom: 10px;
+form button:hover {
+  color: var(--button-text-hover);
+  background-color: var(--button-bg-hover);
+}
+
+#previewImage {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 2px;
 }
 
 .buttons {
-  margin: 20px 0;
+  margin-top: 50px;
+  margin-bottom: 50px;
   display: flex;
   gap: 10px;
   justify-content: space-between;
 }
 
+.buttons #resetBtn {
+  font-family: var(--font-prim);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  text-transform: capitalize;
+  color: var(--button-text);
+  background-color: var(--button-bg);
+  padding: 12px 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+.buttons #resetBtn:hover {
+  color: var(--button-text-hover);
+  background-color: var(--button-bg-hover);
+}
+
+.buttons #uploadInput {
+  font-family: var(--font-prim);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  text-transform: capitalize;
+  color: var(--button-text);
+  background-color: var(--button-bg);
+  padding: 12px 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+.buttons #uploadInput:hover {
+  color: var(--button-text-hover);
+  background-color: var(--button-bg-hover);
+}
+
+.buttons #uploadJSONBtn {
+  font-family: var(--font-prim);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  text-transform: capitalize;
+  color: var(--button-text);
+  background-color: var(--button-bg);
+  padding: 12px 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+.buttons #uploadJSONBtn:hover {
+  color: var(--button-text-hover);
+  background-color: var(--button-bg-hover);
+}
+
 #products {
-  margin-top: 20px;
+  margin-top: 50px;
 }
 
 .product {
   display: flex;
-  gap: 10px;
-  align-items: center;
-  background: #f0f0f0;
+  gap: 25px;
+  align-items: start;
+  border: 2px solid var(--border-color);
   padding: 10px;
   margin-bottom: 10px;
-  border-radius: 6px;
+  border-radius: 2px;
 }
 
 .product img {
   width: 50px;
   height: 50px;
   object-fit: cover;
+  border-radius: 2px;
+}
+
+.product .deleteProduct {
+  font-family: var(--font-prim);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  text-transform: capitalize;
+  color: var(--button-text);
+  background-color: var(--button-bg);
+  padding: 8px 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+.product .deleteProduct:hover {
+  color: var(--button-text-hover);
+  background-color: var(--button-bg-hover);
+}
+
+.productInfo {
+  display: flex;
+  align-items: start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.productInfo strong {
+  color: var(--text-color-prim);
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: var(--font-prim);
 }
 
 .product button {
@@ -64,9 +254,43 @@ form button {
 }
 
 #summary {
-  margin-top: 20px;
-  background: #e0e0e0;
+  margin-top: 25px;
+  color: var(--text-color-sec);
+  border: 2px solid var(--border-color);
   padding: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: var(--font-prim);
   border-radius: 6px;
   font-weight: bold;
 }
+
+/* media */
+
+@media (max-width: 1450px) {
+  .container {
+    max-width: 850px;
+  }
+}
+
+@media (max-width: 850px) {
+  .container {
+    max-width: 450px;
+  }
+
+  h1 {
+    color: var(--text-color-prim);
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: var(--font-prim);
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* media */
