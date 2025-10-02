@@ -11,6 +11,7 @@ const summaryDiv = document.getElementById("summary");
 if (localStorage.getItem("products")) {
   products = JSON.parse(localStorage.getItem("products"));
   renderProducts();
+  renderSummary();
 }
 
 // Add product
@@ -54,7 +55,14 @@ uploadInput.addEventListener("change", (e) => {
   const reader = new FileReader();
   reader.onload = (event) => {
     try {
-      products = JSON.parse(event.target.result);
+      const uploadedProducts = JSON.parse(event.target.result);
+      // Ensure uploaded products have image in base64
+      const validProducts = uploadedProducts.filter(p => p.image && p.name && p.price && p.quantity);
+      if (validProducts.length === 0) {
+        alert("Invalid JSON file or missing images. Use JSON exported from this app.");
+        return;
+      }
+      products = validProducts;
       saveAndRender();
     } catch (err) {
       alert("Invalid JSON file");
@@ -96,7 +104,7 @@ function deleteProduct(index) {
   saveAndRender();
 }
 
-// Render summary
+// Render summary at bottom
 function renderSummary() {
   if (products.length === 0) {
     summaryDiv.innerHTML = "";
