@@ -1,24 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sales Calculator</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <h1>Sales Calculator</h1>
+  <div class="app-container">
+    <h1>💄 Sales Calculator</h1>
 
-  <div class="form">
-    <input type="text" id="name" placeholder="Product Name" required />
-    <input type="number" id="price" placeholder="Price" required />
-    <textarea id="description" placeholder="Description"></textarea>
-    <input type="file" id="image" accept="image/*" />
-    <button onclick="addProduct()">Add Product</button>
+    <form id="productForm">
+      <input type="text" id="name" placeholder="Product Name" required>
+      <input type="number" id="sales" placeholder="Sales Count" required>
+      <input type="file" id="image" accept="image/*" required>
+      <button type="submit">Add Product</button>
+    </form>
+
+    <h2>Products</h2>
+    <div id="productList" class="product-list"></div>
+
+    <h2>Totals</h2>
+    <div class="totals">
+      <p><strong>Total Sales:</strong> <span id="totalSales">0</span></p>
+      <p><strong>Your 3% Share:</strong> <span id="totalShare">0</span> MAD</p>
+    </div>
   </div>
-
-  <div class="products" id="products"></div>
 
   <script src="script.js"></script>
 </body>
