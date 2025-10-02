@@ -54,3 +54,10 @@ form button {
   height: 50px;
   object-fit: cover;
 }
+
+/* ... previous styles ... */
+.product img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}

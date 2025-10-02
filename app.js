@@ -16,23 +16,33 @@ if (localStorage.getItem("products")) {
 // Add product
 productForm.addEventListener("submit", (e) => {
   e.preventDefault();
+
   const name = document.getElementById("name").value;
   const price = parseFloat(document.getElementById("price").value);
-  const image = document.getElementById("image").value;
+  const quantity = parseInt(document.getElementById("quantity").value);
+  const imageFile = document.getElementById("image").files[0];
 
-  const profit = (price * 3) / 100;
+  if (!imageFile) return alert("Please select an image");
 
-  const product = { name, price, profit, image };
-  products.push(product);
-  saveAndRender();
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    const imageData = event.target.result; // base64 string
 
-  productForm.reset();
+    const profit = price * quantity * 0.03;
+
+    const product = { name, price, quantity, profit, image: imageData };
+    products.push(product);
+    saveAndRender();
+    productForm.reset();
+  };
+
+  reader.readAsDataURL(imageFile); // convert image to base64
 });
 
 // Reset data
 resetBtn.addEventListener("click", () => {
   if (confirm("Are you sure you want to reset all data?")) {
-    downloadJSON(); // download before reset
+    downloadJSON(); // download backup before reset
     products = [];
     saveAndRender();
   }
@@ -82,6 +92,7 @@ function renderProducts() {
       <div>
         <strong>${p.name}</strong><br>
         Price: $${p.price.toFixed(2)}<br>
+        Quantity: ${p.quantity}<br>
         Profit: $${p.profit.toFixed(2)}
       </div>
       <button onclick="deleteProduct(${index})">Delete</button>
