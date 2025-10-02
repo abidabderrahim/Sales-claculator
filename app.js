@@ -4,8 +4,8 @@ let products = [];
 const productForm = document.getElementById("productForm");
 const productsDiv = document.getElementById("products");
 const resetBtn = document.getElementById("resetBtn");
-const downloadBtn = document.getElementById("downloadBtn");
 const uploadInput = document.getElementById("uploadInput");
+const summaryDiv = document.getElementById("summary");
 
 // Load from localStorage
 if (localStorage.getItem("products")) {
@@ -26,8 +26,7 @@ productForm.addEventListener("submit", (e) => {
 
   const reader = new FileReader();
   reader.onload = function(event) {
-    const imageData = event.target.result; // base64 string
-
+    const imageData = event.target.result; // base64 image
     const profit = price * quantity * 0.03;
 
     const product = { name, price, quantity, profit, image: imageData };
@@ -35,29 +34,18 @@ productForm.addEventListener("submit", (e) => {
     saveAndRender();
     productForm.reset();
   };
-
-  reader.readAsDataURL(imageFile); // convert image to base64
+  reader.readAsDataURL(imageFile);
 });
 
-// Reset data
+// Reset and download JSON with date
 resetBtn.addEventListener("click", () => {
-  if (confirm("Are you sure you want to reset all data?")) {
-    downloadJSON(); // download backup before reset
-    products = [];
-    saveAndRender();
-  }
+  if (products.length === 0) return alert("No products to reset!");
+  const date = new Date();
+  const dateStr = `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2,'0')}-${date.getDate().toString().padStart(2,'0')}`;
+  downloadJSON(`products_${dateStr}.json`);
+  products = [];
+  saveAndRender();
 });
-
-// Download JSON
-downloadBtn.addEventListener("click", downloadJSON);
-
-function downloadJSON() {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(products, null, 2));
-  const dlAnchor = document.createElement("a");
-  dlAnchor.setAttribute("href", dataStr);
-  dlAnchor.setAttribute("download", "products.json");
-  dlAnchor.click();
-}
 
 // Upload JSON
 uploadInput.addEventListener("change", (e) => {
@@ -79,9 +67,10 @@ uploadInput.addEventListener("change", (e) => {
 function saveAndRender() {
   localStorage.setItem("products", JSON.stringify(products));
   renderProducts();
+  renderSummary();
 }
 
-// Render products
+// Render products table
 function renderProducts() {
   productsDiv.innerHTML = "";
   products.forEach((p, index) => {
@@ -105,4 +94,31 @@ function renderProducts() {
 function deleteProduct(index) {
   products.splice(index, 1);
   saveAndRender();
+}
+
+// Render summary
+function renderSummary() {
+  if (products.length === 0) {
+    summaryDiv.innerHTML = "";
+    return;
+  }
+
+  const totalSold = products.reduce((sum,p) => sum + p.price*p.quantity, 0);
+  const total3Percent = products.reduce((sum,p) => sum + p.price*p.quantity*0.03,0);
+  const totalProfit = products.reduce((sum,p) => sum + p.profit,0);
+
+  summaryDiv.innerHTML = `
+    Total Sold Amount: $${totalSold.toFixed(2)}<br>
+    Total 3% Deduction: $${total3Percent.toFixed(2)}<br>
+    Total Profit: $${totalProfit.toFixed(2)}
+  `;
+}
+
+// Download JSON helper
+function downloadJSON(filename) {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(products, null, 2));
+  const dlAnchor = document.createElement("a");
+  dlAnchor.setAttribute("href", dataStr);
+  dlAnchor.setAttribute("download", filename);
+  dlAnchor.click();
 }
